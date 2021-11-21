@@ -1,4 +1,4 @@
-#include "MainForm.h"
+#include "MyForm.h"
 
 using namespace System;
 
@@ -14,7 +14,7 @@ void Main(array< String ^> ^ args) {
 
 	Application::SetCompatibleTextRenderingDefault(false);
 
-	FishingSimulation::MainForm form;
+	FishingSimulation::MyForm form;
 	Application::Run(%form);
 
 }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Classes.h"
 namespace FishingSimulation {
 
 	using namespace System;
@@ -10,12 +10,12 @@ namespace FishingSimulation {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Сводка для MainForm
+	/// Сводка для MyForm
 	/// </summary>
-	public ref class MainForm : public System::Windows::Forms::Form
+	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MainForm(void)
+		MyForm(void)
 		{
 			InitializeComponent();
 			//
@@ -27,7 +27,7 @@ namespace FishingSimulation {
 		/// <summary>
 		/// Освободить все используемые ресурсы.
 		/// </summary>
-		~MainForm()
+		~MyForm()
 		{
 			if (components)
 			{
@@ -36,9 +36,11 @@ namespace FishingSimulation {
 		}
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	protected:
-	private: System::Windows::Forms::PictureBox^  pictureBox2;
+
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
 	private: System::Windows::Forms::PictureBox^  pictureBox4;
+	private: System::Windows::Forms::Panel^  water;
+
 
 
 	private:
@@ -54,20 +56,19 @@ namespace FishingSimulation {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
-			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
+			this->water = (gcnew System::Windows::Forms::Panel());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
+			this->pictureBox1->Image = System::Drawing::Image::FromFile("..\\static\\Причал.png");
 			this->pictureBox1->Location = System::Drawing::Point(-10, 243);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(263, 485);
@@ -75,21 +76,10 @@ namespace FishingSimulation {
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			// 
-			// pictureBox2
-			// 
-			this->pictureBox2->BackColor = System::Drawing::SystemColors::ActiveBorder;
-			this->pictureBox2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.Image")));
-			this->pictureBox2->Location = System::Drawing::Point(252, 243);
-			this->pictureBox2->Name = L"pictureBox2";
-			this->pictureBox2->Size = System::Drawing::Size(1336, 544);
-			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->pictureBox2->TabIndex = 1;
-			this->pictureBox2->TabStop = false;
-			// 
 			// pictureBox3
 			// 
-			this->pictureBox3->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox3.Image")));
-			this->pictureBox3->Location = System::Drawing::Point(-336, 1);
+			this->pictureBox3->Image = System::Drawing::Image::FromFile("..\\static\\sky.png");
+			this->pictureBox3->Location = System::Drawing::Point(-373, 1);
 			this->pictureBox3->Name = L"pictureBox3";
 			this->pictureBox3->Size = System::Drawing::Size(1823, 245);
 			this->pictureBox3->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
@@ -99,7 +89,7 @@ namespace FishingSimulation {
 			// pictureBox4
 			// 
 			this->pictureBox4->BackColor = System::Drawing::Color::DeepSkyBlue;
-			this->pictureBox4->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox4.Image")));
+			this->pictureBox4->Image = System::Drawing::Image::FromFile("..\\static\\sun.png");
 			this->pictureBox4->Location = System::Drawing::Point(1322, 12);
 			this->pictureBox4->Name = L"pictureBox4";
 			this->pictureBox4->Size = System::Drawing::Size(100, 82);
@@ -107,23 +97,32 @@ namespace FishingSimulation {
 			this->pictureBox4->TabIndex = 3;
 			this->pictureBox4->TabStop = false;
 			// 
-			// MainForm
+			// water
+			// 
+			this->water->BackColor = System::Drawing::Color::RoyalBlue;
+			this->water->Location = System::Drawing::Point(253, 243);
+			this->water->Name = L"water";
+			this->water->Size = System::Drawing::Size(1197, 470);
+			this->water->TabIndex = 4;
+			// 
+			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1450, 707);
+			this->Controls->Add(this->water);
 			this->Controls->Add(this->pictureBox4);
 			this->Controls->Add(this->pictureBox3);
-			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->pictureBox1);
-			this->Name = L"MainForm";
+			this->Name = L"MyForm";
 			this->Text = L"MainForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->EndInit();
 			this->ResumeLayout(false);
 
+			Fish^ fish = gcnew Fish();
+			water->Controls->Add(fish);
 		}
 #pragma endregion
 	};
