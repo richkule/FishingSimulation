@@ -8,14 +8,19 @@ using namespace System::Drawing;
 public ref class Hook : public System::Windows::Forms::PictureBox {
 private:
 	bool isEmpty = true;
+	int posX = 400;
+	int posY = 0;
+	int sizeX = 40;
+	int sizeY = 50;
 public:
 	Hook(void)
 	{
 		this->Image = System::Drawing::Image::FromFile("..\\static\\hook.png");
-		this->Location = System::Drawing::Point(400, 0);
-		this->Size = System::Drawing::Size(25, 25);
+		this->Location = System::Drawing::Point(posX, posY);
+		this->Size = System::Drawing::Size(sizeX, sizeY);
 		this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-		this->BackColor = System::Drawing::Color::RoyalBlue;
+		this->BackColor = System::Drawing::Color::Transparent;
+
 	}
 	bool CheckCatch(System::Drawing::Point^ fish_coor, System::Drawing::Size^ fish_size) {
 		if (!this->isEmpty) {
@@ -44,8 +49,12 @@ public:
 
 public ref class Fish : public System::Windows::Forms::PictureBox {
 private: System::Windows::Forms::Timer^  timer;
-		 int speedX = 3;
+		 int speedX = 10;
 		 int speedY = 0;
+		 int sizeX = 110;
+		 int sizeY = 50;
+		 int xPos = 0;
+		 int yPos = 0;
 		 bool isForwardDirection = true;
 		 bool isCatch = false;
 		 Hook^ hook;
@@ -54,10 +63,10 @@ public:
 	{
 		this->hook = hook;
 		this->Image = System::Drawing::Image::FromFile("..\\static\\fish.png");
-		this->Location = System::Drawing::Point(0, 0);
-		this->Size = System::Drawing::Size(100, 100);
+		this->Location = System::Drawing::Point(xPos, yPos);
+		this->Size = System::Drawing::Size(sizeX, sizeY);
 		this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-		this->BackColor = System::Drawing::Color::RoyalBlue;
+		this->BackColor = System::Drawing::Color::Transparent;
 		this->timer = gcnew System::Windows::Forms::Timer();
 		this->timer->Tick += gcnew System::EventHandler(this, &Fish::tick);
 		this->timer->Enabled = true;
@@ -88,7 +97,11 @@ private: void checkCatch(void) {
 		this->speedX = 100;
 		this->timer->Enabled = false;
 		this->isCatch = true;
+		this->Size = System::Drawing::Size(sizeY, sizeX);
+		this->Image = System::Drawing::Image::FromFile("..\\static\\catch_fish.png");
 		this->Image->RotateFlip(RotateFlipType::Rotate90FlipY);
+		this->Location = System::Drawing::Point(this->Location.X + this->sizeX);
+		this->hook->Visible = false;
 		this->Refresh();
 	}
 }

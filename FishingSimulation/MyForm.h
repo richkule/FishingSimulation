@@ -24,6 +24,7 @@ namespace FishingSimulation {
 			Hook^ hook = gcnew Hook();
 			this->water->Controls->Add(gcnew Fish(hook));
 			this->water->Controls->Add(hook);
+
 			//
 			//TODO: добавьте код конструктора
 			//
@@ -50,6 +51,7 @@ namespace FishingSimulation {
 
 
 	private: System::Windows::Forms::Panel^  water;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -102,7 +104,7 @@ namespace FishingSimulation {
 			// 
 			this->sun->BackColor = System::Drawing::Color::DeepSkyBlue;
 			this->sun->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sun.Image")));
-			this->sun->Location = System::Drawing::Point(1322, 12);
+			this->sun->Location = System::Drawing::Point(1197, 24);
 			this->sun->Name = L"sun";
 			this->sun->Size = System::Drawing::Size(100, 82);
 			this->sun->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
@@ -122,8 +124,8 @@ namespace FishingSimulation {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1450, 707);
-			this->Controls->Add(this->water);
 			this->Controls->Add(this->sun);
+			this->Controls->Add(this->water);
 			this->Controls->Add(this->sky);
 			this->Controls->Add(this->berth);
 			this->Name = L"MyForm";
