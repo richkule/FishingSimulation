@@ -21,7 +21,9 @@ namespace FishingSimulation {
 			this->sun->Image = System::Drawing::Image::FromFile("..\\static\\sun.png");
 			this->sky->Image = System::Drawing::Image::FromFile("..\\static\\sky.png");
 			this->berth->Image = System::Drawing::Image::FromFile("..\\static\\berth.png");
-			this->water->Controls->Add(gcnew Fish());
+			Hook^ hook = gcnew Hook();
+			this->water->Controls->Add(gcnew Fish(hook));
+			this->water->Controls->Add(hook);
 			//
 			//TODO: добавьте код конструктора
 			//
