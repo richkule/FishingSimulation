@@ -1,2 +1,3 @@
-﻿  MainForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
+﻿  MainForm.cpp
+  MainForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   FishingSimulation.vcxproj -> C:\Users\KPK\Desktop\Волков\repos\FishingSimulation\Debug\FishingSimulation.exe
