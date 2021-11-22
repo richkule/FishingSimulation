@@ -17,6 +17,14 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 Class Hook: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.PictureBox
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 sizeX : Public
+    Int32 sizeY : Public
+  Methods:
+    CheckCatch(ValueType Point IsBoxed, ValueType Size IsBoxed): PrivateScope, Public, HideBySig
+Class Float: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.PictureBox
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     CheckCatch(ValueType Point IsBoxed, ValueType Size IsBoxed): PrivateScope, Public, HideBySig
 Class Fish: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit

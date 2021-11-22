@@ -41,7 +41,7 @@ namespace FishingSimulation {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::PictureBox^  berth;
+
 	protected:
 
 	private: System::Windows::Forms::PictureBox^  sky;
@@ -51,6 +51,9 @@ namespace FishingSimulation {
 
 
 	private: System::Windows::Forms::Panel^  water;
+	private: System::Windows::Forms::PictureBox^  berth;
+
+
 
 
 	private: System::ComponentModel::IContainer^  components;
@@ -71,31 +74,22 @@ namespace FishingSimulation {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			this->berth = (gcnew System::Windows::Forms::PictureBox());
 			this->sky = (gcnew System::Windows::Forms::PictureBox());
 			this->sun = (gcnew System::Windows::Forms::PictureBox());
 			this->water = (gcnew System::Windows::Forms::Panel());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->BeginInit();
+			this->berth = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->BeginInit();
+			this->water->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// berth
-			// 
-			this->berth->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"berth.Image")));
-			this->berth->Location = System::Drawing::Point(-10, 237);
-			this->berth->Name = L"berth";
-			this->berth->Size = System::Drawing::Size(263, 491);
-			this->berth->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->berth->TabIndex = 0;
-			this->berth->TabStop = false;
 			// 
 			// sky
 			// 
 			this->sky->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sky.Image")));
-			this->sky->Location = System::Drawing::Point(-373, 1);
+			this->sky->Location = System::Drawing::Point(262, 0);
 			this->sky->Name = L"sky";
-			this->sky->Size = System::Drawing::Size(1823, 245);
+			this->sky->Size = System::Drawing::Size(1188, 38);
 			this->sky->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->sky->TabIndex = 2;
 			this->sky->TabStop = false;
@@ -104,9 +98,9 @@ namespace FishingSimulation {
 			// 
 			this->sun->BackColor = System::Drawing::Color::DeepSkyBlue;
 			this->sun->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sun.Image")));
-			this->sun->Location = System::Drawing::Point(1197, 24);
+			this->sun->Location = System::Drawing::Point(1350, 0);
 			this->sun->Name = L"sun";
-			this->sun->Size = System::Drawing::Size(100, 82);
+			this->sun->Size = System::Drawing::Size(100, 100);
 			this->sun->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->sun->TabIndex = 3;
 			this->sun->TabStop = false;
@@ -114,25 +108,37 @@ namespace FishingSimulation {
 			// water
 			// 
 			this->water->BackColor = System::Drawing::Color::RoyalBlue;
-			this->water->Location = System::Drawing::Point(253, 246);
+			this->water->Controls->Add(this->berth);
+			this->water->Controls->Add(this->sky);
+			this->water->Location = System::Drawing::Point(0, 246);
 			this->water->Name = L"water";
-			this->water->Size = System::Drawing::Size(1197, 461);
+			this->water->Size = System::Drawing::Size(1450, 461);
 			this->water->TabIndex = 4;
+			// 
+			// berth
+			// 
+			this->berth->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"berth.Image")));
+			this->berth->Location = System::Drawing::Point(0, 0);
+			this->berth->Name = L"berth";
+			this->berth->Size = System::Drawing::Size(263, 461);
+			this->berth->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->berth->TabIndex = 1;
+			this->berth->TabStop = false;
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::DeepSkyBlue;
 			this->ClientSize = System::Drawing::Size(1450, 707);
 			this->Controls->Add(this->sun);
 			this->Controls->Add(this->water);
-			this->Controls->Add(this->sky);
-			this->Controls->Add(this->berth);
 			this->Name = L"MyForm";
 			this->Text = L"MainForm";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->EndInit();
+			this->water->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->EndInit();
 			this->ResumeLayout(false);
 
 		}
