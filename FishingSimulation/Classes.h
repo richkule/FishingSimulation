@@ -50,21 +50,24 @@ public:
 
 public ref class Float : public System::Windows::Forms::PictureBox {
 private:
-	bool isEmpty = true;
+	int current_frame = 0;
+	bool isUpperPosition = true;
+	bool isTouch = false;
 	int posX = 400;
-	int sizeX = 25;
-	int sizeY = 50;
+	int sizeX = 19;
+	int sizeY = 38;
 	int deep = 40;
+	Timer^ timer;
 	System::Drawing::Image^ diveDefault = System::Drawing::Image::FromFile("..\\static\\floatDefault.png");
-	int defaultYPos = 220;
+	int defaultYPos = 19;
 	System::Drawing::Image^ dive25 = System::Drawing::Image::FromFile("..\\static\\float25.png");
-	int dive25YPos = 232;
+	int dive25YPos = 20;
 	System::Drawing::Image^ dive50 = System::Drawing::Image::FromFile("..\\static\\float50.png");
-	int dive50YPos = 234;
+	int dive50YPos = 28;
 	System::Drawing::Image^ dive75 = System::Drawing::Image::FromFile("..\\static\\float75.png");
-	int dive75YPos = 238;
+	int dive75YPos = 32;
 	System::Drawing::Image^ dive100 = System::Drawing::Image::FromFile("..\\static\\float100.png");
-	int dive100YPos = 246;
+	int dive100YPos = 28;
 public:
 	Float(void)
 	{
@@ -73,35 +76,59 @@ public:
 		this->Size = System::Drawing::Size(sizeX, sizeY);
 		this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 		this->BackColor = System::Drawing::Color::Transparent;
+		this->timer = gcnew System::Windows::Forms::Timer();
+		this->timer->Interval = 300;
+		this->timer->Tick += gcnew System::EventHandler(this, &Float::animate);
+		this->timer->Enabled = true;
 
 	}
-	bool CheckCatch(System::Drawing::Point^ fish_coor, System::Drawing::Size^ fish_size) {
-		if (!this->isEmpty) {
-			return false;
-		}
-		int fish_y = fish_coor->Y;
-		int fish_y1 = fish_y + fish_size->Height;
-		int fish_x = fish_coor->X;
-		int fish_x1 = fish_x + fish_size->Width;
-
-		int hook_y = this->Location.Y;
-		int hook_y1 = hook_y + this->Size.Height;
-		int hook_x = this->Location.X;
-		int hook_x1 = hook_x + this->Size.Width;
-
-		if (fish_y < hook_y1 || fish_y1 > hook_y || fish_x1 < hook_x || fish_x > hook_x1) {
-			return false;
+private: void animate(System::Object^  sender, System::EventArgs^  e) {
+	if (isUpperPosition) {
+		isUpperPosition = false;
+		if (isTouch) {
+			this->Location = System::Drawing::Point(posX, dive75YPos);
+			this->Image = this->dive75;
+			this->Refresh();
 		}
 		else {
-			this->isEmpty = false;
-			return true;
+			this->Location = System::Drawing::Point(posX, dive25YPos);
+			this->Image = this->dive25;
+			this->Refresh();
 		}
 	}
+	else
+	{
+		isUpperPosition = true;
+		if (isTouch) {
+			this->Location = System::Drawing::Point(posX, dive50YPos);
+			this->Image = this->dive50;
+			this->Refresh();
+			isTouch = false;
+			timer->Interval = 300;
+		}
+		else {
+			this->Location = System::Drawing::Point(posX, defaultYPos);
+			this->Image = this->diveDefault;
+			this->Refresh();
+		}
+	}
+}
+public: void touch(System::Object^  sender, System::EventArgs^  e) {
+	this->timer->Enabled = false;
+	this->Location = System::Drawing::Point(posX, dive50YPos);
+	this->Image = this->dive50;
+	this->Refresh();
+	isUpperPosition = true;
+	isTouch = true;
+	timer->Interval = 50;
+	timer->Enabled = true;
+}
+
 };
 
 public ref class Fish : public System::Windows::Forms::PictureBox {
 private: System::Windows::Forms::Timer^  timer;
-		 int speedX = 0;
+		 int speedX = -5;
 		 int speedY = 0;
 		 int sizeX = 110;
 		 int sizeY = 50;
@@ -145,8 +172,6 @@ private: void move(void) {
 		}
 	}
 	this->Location = System::Drawing::Point(this->Location.X + this->speedX, this->Location.Y + this->speedY);
-	Random^ random = gcnew Random();
-	speedX = random->Next(-10, 10);
 }
 private: void checkCatch(void) {
 	if (Rectangle(this->Location,this->Size).IntersectsWith(Rectangle(this->hook->Location,this->hook->Size))){

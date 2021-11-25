@@ -21,9 +21,12 @@ namespace FishingSimulation {
 			this->sun->Image = System::Drawing::Image::FromFile("..\\static\\sun.png");
 			this->sky->Image = System::Drawing::Image::FromFile("..\\static\\sky.png");
 			this->berth->Image = System::Drawing::Image::FromFile("..\\static\\berth.png");
+			this->sky->SendToBack();
 			Hook^ hook = gcnew Hook();
 			this->water->Controls->Add(gcnew Fish(hook));
+			this->water->Controls->Add(gcnew Float());
 			this->water->Controls->Add(hook);
+			this->sky->SendToBack();
 
 			//
 			//TODO: добавьте код конструктора
@@ -44,7 +47,7 @@ namespace FishingSimulation {
 
 	protected:
 
-	private: System::Windows::Forms::PictureBox^  sky;
+
 	private: System::Windows::Forms::PictureBox^  sun;
 	protected:
 
@@ -52,6 +55,9 @@ namespace FishingSimulation {
 
 	private: System::Windows::Forms::Panel^  water;
 	private: System::Windows::Forms::PictureBox^  berth;
+	private: System::Windows::Forms::PictureBox^  sky;
+
+
 
 
 
@@ -74,25 +80,15 @@ namespace FishingSimulation {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			this->sky = (gcnew System::Windows::Forms::PictureBox());
 			this->sun = (gcnew System::Windows::Forms::PictureBox());
 			this->water = (gcnew System::Windows::Forms::Panel());
 			this->berth = (gcnew System::Windows::Forms::PictureBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->BeginInit();
+			this->sky = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->BeginInit();
 			this->water->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// sky
-			// 
-			this->sky->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sky.Image")));
-			this->sky->Location = System::Drawing::Point(262, 0);
-			this->sky->Name = L"sky";
-			this->sky->Size = System::Drawing::Size(1188, 38);
-			this->sky->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->sky->TabIndex = 2;
-			this->sky->TabStop = false;
 			// 
 			// sun
 			// 
@@ -125,6 +121,16 @@ namespace FishingSimulation {
 			this->berth->TabIndex = 1;
 			this->berth->TabStop = false;
 			// 
+			// sky
+			// 
+			this->sky->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sky.Image")));
+			this->sky->Location = System::Drawing::Point(262, 0);
+			this->sky->Name = L"sky";
+			this->sky->Size = System::Drawing::Size(1188, 38);
+			this->sky->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->sky->TabIndex = 2;
+			this->sky->TabStop = false;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -135,13 +141,14 @@ namespace FishingSimulation {
 			this->Controls->Add(this->water);
 			this->Name = L"MyForm";
 			this->Text = L"MainForm";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->EndInit();
 			this->water->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
+
 };
 }
