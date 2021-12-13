@@ -1,3 +1,10 @@
 ﻿  MyForm.cpp
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\classes.h(11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\classes.h(11): warning C4056: переполнение при арифметических операциях с константой с плавающей точкой
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\classes.h(12): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\classes.h(12): warning C4056: переполнение при арифметических операциях с константой с плавающей точкой
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\classes.h(59): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\myform.h(200): warning C4244: инициализация: преобразование "__int64" в "int", возможна потеря данных
+c:\users\kpk\desktop\волков\repos\fishingsimulation\fishingsimulation\myform.h(201): warning C4244: инициализация: преобразование "__int64" в "int", возможна потеря данных
   MyForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   FishingSimulation.vcxproj -> C:\Users\KPK\Desktop\Волков\repos\FishingSimulation\Debug\FishingSimulation.exe

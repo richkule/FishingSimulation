@@ -5,23 +5,26 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Drawing;
 
+
 public ref class Hook : public System::Windows::Forms::PictureBox {
 private:
-	bool isEmpty = true;
-	int posX = 600;
-	int posY = 85;
+	int posX = -1e300;
+	int posY = -1e300;
 public:
+	bool isEmpty = false;
 	int sizeX = 20;
 	int sizeY = 25;
+	Point couplingPoint;
 public:
-	Hook(void)
+	Hook()
 	{
+		this->posX = posX;
+		this->posY = posY;
 		this->Image = System::Drawing::Image::FromFile("..\\static\\hook.png");
-		this->Location = System::Drawing::Point(posX, posY);
 		this->Size = System::Drawing::Size(sizeX, sizeY);
 		this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 		this->BackColor = System::Drawing::Color::Transparent;
-
+		this->Visible = false;
 	}
 	bool CheckCatch(System::Drawing::Point^ fish_coor, System::Drawing::Size^ fish_size) {
 		if (!this->isEmpty) {
@@ -45,6 +48,16 @@ public:
 			return true;
 		}
 	}
+public:
+	void Activate(Point couplingPoint) {
+		this->couplingPoint = couplingPoint;
+		this->SetLocationFromCouplingPoint(couplingPoint);
+		this->isEmpty = true;
+		this->Visible = true;
+	}
+	void SetLocationFromCouplingPoint(Point couplingPoint) {
+		this->Location = Point(couplingPoint.X - this->Size.Width * 0.85, couplingPoint.Y);
+	}
 };
 
 
@@ -53,10 +66,10 @@ private:
 	int current_frame = 0;
 	bool isUpperPosition = true;
 	bool isTouch = false;
-	int posX = 400;
 	int sizeX = 19;
 	int sizeY = 38;
 	int deep = 40;
+	int posX;
 	Timer^ timer;
 	System::Drawing::Image^ diveDefault = System::Drawing::Image::FromFile("..\\static\\floatDefault.png");
 	int defaultYPos = 19;
@@ -67,22 +80,31 @@ private:
 	System::Drawing::Image^ dive75 = System::Drawing::Image::FromFile("..\\static\\float75.png");
 	int dive75YPos = 32;
 	System::Drawing::Image^ dive100 = System::Drawing::Image::FromFile("..\\static\\float100.png");
-	int dive100YPos = 28;
+	int dive100YPos = 38;
 public:
-	Float(void)
+	Point couplingPoint;
+	Float()
 	{
 		this->Image = System::Drawing::Image::FromFile("..\\static\\floatDefault.png");
-		this->Location = System::Drawing::Point(posX, defaultYPos);
 		this->Size = System::Drawing::Size(sizeX, sizeY);
 		this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 		this->BackColor = System::Drawing::Color::Transparent;
 		this->timer = gcnew System::Windows::Forms::Timer();
 		this->timer->Interval = 300;
-		this->timer->Tick += gcnew System::EventHandler(this, &Float::animate);
-		this->timer->Enabled = true;
-
+		this->timer->Tick += gcnew System::EventHandler(this, &Float::Animate);
+		this->timer->Enabled = false;
+		this->Visible = false;
+		
 	}
-private: void animate(System::Object^  sender, System::EventArgs^  e) {
+public:
+	void Activate(int posX) {
+		this->posX = posX;
+		this->Location = System::Drawing::Point(posX, defaultYPos);
+		couplingPoint = Point(this->Location.X + this->Size.Width / 2, this->Location.Y + this->Size.Height);
+		timer->Enabled = true;
+		Visible = true;
+	}
+private: void Animate(System::Object^  sender, System::EventArgs^  e) {
 	if (isUpperPosition) {
 		isUpperPosition = false;
 		if (isTouch) {
@@ -113,7 +135,7 @@ private: void animate(System::Object^  sender, System::EventArgs^  e) {
 		}
 	}
 }
-public: void touch(System::Object^  sender, System::EventArgs^  e) {
+public: void Touch(System::Object^  sender, System::EventArgs^  e) {
 	this->timer->Enabled = false;
 	this->Location = System::Drawing::Point(posX, dive50YPos);
 	this->Image = this->dive50;
@@ -123,7 +145,6 @@ public: void touch(System::Object^  sender, System::EventArgs^  e) {
 	timer->Interval = 50;
 	timer->Enabled = true;
 }
-
 };
 
 public ref class Fish : public System::Windows::Forms::PictureBox {
@@ -174,6 +195,7 @@ private: void move(void) {
 	this->Location = System::Drawing::Point(this->Location.X + this->speedX, this->Location.Y + this->speedY);
 }
 private: void checkCatch(void) {
+	if (!hook->isEmpty) return;
 	if (Rectangle(this->Location,this->Size).IntersectsWith(Rectangle(this->hook->Location,this->hook->Size))){
 		this->timer->Enabled = false;
 		this->isCatch = true;
@@ -194,4 +216,42 @@ private: System::Void tick(System::Object^  sender, System::EventArgs^  e) {
 	this->move();
 }
 
+};
+
+
+
+public ref class Tackle : public Component {
+private:
+	Float^ fl;
+	Graphics^ gr;
+	Panel^ panel;
+	Timer^ timer = gcnew Timer();
+public:
+	Hook^ hook;
+	Tackle(Panel^ panel)
+	{
+		this->panel = panel;
+		gr = panel->CreateGraphics();
+		fl = gcnew Float();
+		panel->Controls->Add(fl);
+		hook = gcnew Hook();
+		panel->Controls->Add(hook);
+		this->timer->Interval = 1;
+		this->timer->Tick += gcnew System::EventHandler(this, &Tackle::DrawLine);
+		this->timer->Enabled = false;
+	}
+
+public:
+	void SetTackle(int height, int posX) {
+		fl->Activate(posX);
+		hook->Activate(Point(fl->couplingPoint.X, fl->couplingPoint.Y + height));
+		timer->Enabled = true;
+	}
+
+private: void DrawLine(System::Object^  sender, System::EventArgs^  e){
+	Pen^ p = gcnew Pen(Color::White, 1);
+	Point p1 = fl->couplingPoint;
+	Point p2 = hook->couplingPoint;
+	gr->DrawLine(p, p1, p2);
+}
 };
