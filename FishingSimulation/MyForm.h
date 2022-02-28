@@ -17,14 +17,20 @@ namespace FishingSimulation {
 	public:
 		MyForm(void)
 		{
+
 			InitializeComponent();
 
-			this->sun->Image = System::Drawing::Image::FromFile("..\\static\\sun.png");
-			this->sky->Image = System::Drawing::Image::FromFile("..\\static\\sky.png");
-			this->berth->Image = System::Drawing::Image::FromFile("..\\static\\berth.png");
-			tl = gcnew Tackle(this->water);
-			this->sky->SendToBack();
-			this->water->Controls->Add(gcnew Fish(tl->hook));
+			
+			this->platrorm->Image = System::Drawing::Image::FromFile("..\\static\\berth.png");
+			WorldGenerator^ wg = gcnew WorldGenerator();
+			this->platrorm->Visible = false;
+			this->whether->Image = wg->ReturnWhetherImage();
+			this->BackColor = wg->ReturnColor();
+			this->fisherBoat = gcnew FisherWithBoat(this, this->BackColor);
+			this->Controls->Add(this->fisherBoat);
+			Hook^ hook = this->fisherBoat->GetHook();
+			wg->SpawnFish(this, hook);			
+		
 			//
 			//TODO: добавьте код конструктора
 			//
@@ -45,21 +51,37 @@ namespace FishingSimulation {
 	protected:
 
 
-	private: System::Windows::Forms::PictureBox^  sun;
+	private: System::Windows::Forms::PictureBox^  whether;
+
+
 	protected:
 
 
 
-	private: System::Windows::Forms::Panel^  water;
-	private: System::Windows::Forms::PictureBox^  berth;
+
+	private: System::Windows::Forms::PictureBox^  platrorm;
 
 
-	private: System::Windows::Forms::PictureBox^  sky;
-	private: System::Windows::Forms::Button^  button1;
-			 Tackle^ tl;
-	private: System::Windows::Forms::Panel^  panel1;
-	private: System::Windows::Forms::TextBox^  textBox1;
-	private: System::Windows::Forms::TextBox^  textBox2;
+
+
+
+
+
+			 FisherWithBoat^ fisherBoat;
+			 Fisher^ fisher;
+	private: System::Windows::Forms::Button^  left;
+	private: System::Windows::Forms::Button^  right;
+	private: System::Windows::Forms::Button^  stop;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -86,120 +108,115 @@ namespace FishingSimulation {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			this->sun = (gcnew System::Windows::Forms::PictureBox());
-			this->water = (gcnew System::Windows::Forms::Panel());
-			this->berth = (gcnew System::Windows::Forms::PictureBox());
-			this->sky = (gcnew System::Windows::Forms::PictureBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->panel1 = (gcnew System::Windows::Forms::Panel());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->BeginInit();
-			this->water->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->BeginInit();
+			this->whether = (gcnew System::Windows::Forms::PictureBox());
+			this->platrorm = (gcnew System::Windows::Forms::PictureBox());
+			this->left = (gcnew System::Windows::Forms::Button());
+			this->right = (gcnew System::Windows::Forms::Button());
+			this->stop = (gcnew System::Windows::Forms::Button());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->whether))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->platrorm))->BeginInit();
 			this->SuspendLayout();
 			// 
-			// sun
+			// whether
 			// 
-			this->sun->BackColor = System::Drawing::Color::DeepSkyBlue;
-			this->sun->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sun.Image")));
-			this->sun->Location = System::Drawing::Point(1350, 0);
-			this->sun->Name = L"sun";
-			this->sun->Size = System::Drawing::Size(100, 100);
-			this->sun->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->sun->TabIndex = 3;
-			this->sun->TabStop = false;
+			this->whether->BackColor = System::Drawing::Color::Transparent;
+			this->whether->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"whether.Image")));
+			this->whether->Location = System::Drawing::Point(1350, 0);
+			this->whether->Name = L"whether";
+			this->whether->Size = System::Drawing::Size(100, 100);
+			this->whether->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->whether->TabIndex = 3;
+			this->whether->TabStop = false;
 			// 
-			// water
+			// platrorm
 			// 
-			this->water->BackColor = System::Drawing::Color::RoyalBlue;
-			this->water->Controls->Add(this->berth);
-			this->water->Controls->Add(this->sky);
-			this->water->Location = System::Drawing::Point(0, 246);
-			this->water->Name = L"water";
-			this->water->Size = System::Drawing::Size(1450, 461);
-			this->water->TabIndex = 4;
+			this->platrorm->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"platrorm.Image")));
+			this->platrorm->Location = System::Drawing::Point(0, 428);
+			this->platrorm->Name = L"platrorm";
+			this->platrorm->Size = System::Drawing::Size(263, 476);
+			this->platrorm->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->platrorm->TabIndex = 1;
+			this->platrorm->TabStop = false;
 			// 
-			// berth
+			// left
 			// 
-			this->berth->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"berth.Image")));
-			this->berth->Location = System::Drawing::Point(0, 0);
-			this->berth->Name = L"berth";
-			this->berth->Size = System::Drawing::Size(263, 461);
-			this->berth->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->berth->TabIndex = 1;
-			this->berth->TabStop = false;
+			this->left->Location = System::Drawing::Point(32, 21);
+			this->left->Name = L"left";
+			this->left->Size = System::Drawing::Size(41, 27);
+			this->left->TabIndex = 4;
+			this->left->Text = L"left";
+			this->left->UseVisualStyleBackColor = true;
+			this->left->Click += gcnew System::EventHandler(this, &MyForm::left_Click);
+
 			// 
-			// sky
+			// right
 			// 
-			this->sky->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"sky.Image")));
-			this->sky->Location = System::Drawing::Point(262, 0);
-			this->sky->Name = L"sky";
-			this->sky->Size = System::Drawing::Size(1188, 38);
-			this->sky->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->sky->TabIndex = 2;
-			this->sky->TabStop = false;
+			this->right->Location = System::Drawing::Point(157, 21);
+			this->right->Name = L"right";
+			this->right->Size = System::Drawing::Size(41, 27);
+			this->right->TabIndex = 5;
+			this->right->Text = L"right";
+			this->right->UseVisualStyleBackColor = true;
+			this->right->Click += gcnew System::EventHandler(this, &MyForm::right_Click);
+
 			// 
-			// button1
+			// stop
 			// 
-			this->button1->Location = System::Drawing::Point(24, 77);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 5;
-			this->button1->Text = L"button1";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
-			// 
-			// panel1
-			// 
-			this->panel1->Location = System::Drawing::Point(425, 63);
-			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(200, 100);
-			this->panel1->TabIndex = 6;
-			// 
-			// textBox1
-			// 
-			this->textBox1->Location = System::Drawing::Point(24, 13);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 20);
-			this->textBox1->TabIndex = 7;
-			this->textBox1->Text = L"400";
-			// 
-			// textBox2
-			// 
-			this->textBox2->Location = System::Drawing::Point(24, 51);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(100, 20);
-			this->textBox2->TabIndex = 8;
-			this->textBox2->Text = L"50";
+			this->stop->Location = System::Drawing::Point(60, 54);
+			this->stop->Name = L"stop";
+			this->stop->Size = System::Drawing::Size(109, 27);
+			this->stop->TabIndex = 6;
+			this->stop->Text = L"stop";
+			this->stop->UseVisualStyleBackColor = true;
+			this->stop->Click += gcnew System::EventHandler(this, &MyForm::stop_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::DeepSkyBlue;
-			this->ClientSize = System::Drawing::Size(1450, 707);
-			this->Controls->Add(this->textBox2);
-			this->Controls->Add(this->textBox1);
-			this->Controls->Add(this->panel1);
-			this->Controls->Add(this->button1);
-			this->Controls->Add(this->sun);
-			this->Controls->Add(this->water);
+			this->ClientSize = System::Drawing::Size(1450, 901);
+			this->Controls->Add(this->stop);
+			this->Controls->Add(this->right);
+			this->Controls->Add(this->left);
+			this->Controls->Add(this->platrorm);
+			this->Controls->Add(this->whether);
 			this->Name = L"MyForm";
 			this->Text = L"MainForm";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sun))->EndInit();
-			this->water->ResumeLayout(false);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->berth))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->sky))->EndInit();
+			this->Click += gcnew System::EventHandler(this, &MyForm::MyForm_Click);
+			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::PaintWater);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->whether))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->platrorm))->EndInit();
 			this->ResumeLayout(false);
-			this->PerformLayout();
 
 		}
-private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-	int posX = Convert::ToInt64(textBox1->Text);
-	int height = Convert::ToInt64(textBox2->Text);
-	tl->SetTackle(height, posX);
+
+private: System::Void PaintWater(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+	e->Graphics->FillRectangle(Brushes::RoyalBlue, 0, 466, 1500, 600);
+}
+private: System::Void MyForm_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (fisherBoat != nullptr) {
+		fisherBoat->Action(sender, e);
+	}
+	else {
+		this->fisher->Action(this, gcnew EventArgs());
+	}
+	
+}
+	private: System::Void left_Click(System::Object^  sender, System::EventArgs^  e) {
+		if (fisherBoat != nullptr) {
+			fisherBoat->Left(sender, e);
+		}
+	}
+private: System::Void right_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (fisherBoat != nullptr) {
+		fisherBoat->Right(sender, e);
+	}
+}
+private: System::Void stop_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (fisherBoat != nullptr) {
+		fisherBoat->KeyUp(sender, e);
+	}
 }
 };
 }
