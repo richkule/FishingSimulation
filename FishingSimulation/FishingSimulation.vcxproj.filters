@@ -23,14 +23,29 @@
     <ClInclude Include="MyForm.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Classes.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="WorldGenerator.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Hook.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="Tackle.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Fish.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="Hook.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Float.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="FisherWithBoat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Fisher.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Fish.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

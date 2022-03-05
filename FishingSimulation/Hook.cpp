@@ -1,4 +1,4 @@
-#include "Fish.h"
+#include "Fish.cpp"
 namespace Hook {
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -22,11 +22,15 @@ namespace Hook {
 		}
 	public:
 		delegate void HookEventHandler();
+		delegate void HookSetUpEventHandler(Point loc, System::Drawing::Size size);
 		static event HookEventHandler^ CatchEvent;
 		static event HookEventHandler^ TouchEvent;
 		static event HookEventHandler^ EatEvent;
 		static event HookEventHandler^ GetUpEvent;
-		static event HookEventHandler^ SetUpEvent;
+		static event HookSetUpEventHandler^ SetUpEvent;
+		Fish::Fish::EatEventHandler^ tryEatHandler;
+		static event Fish::Fish::FoodInWaterHandler^ foodInWaterEvent;
+		static event Fish::Fish::FoodNotInWaterHandler^ foodNotInWaterEvent;
 
 	public:
 		Hook()
@@ -38,6 +42,7 @@ namespace Hook {
 			this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->BackColor = System::Drawing::Color::Transparent;
 			this->Visible = false;
+			tryEatHandler = gcnew Fish::Fish::EatEventHandler(this, &Hook::Touch);
 		}
 		/*
 		void SetUp(Point couplingPoint) {
@@ -56,6 +61,7 @@ namespace Hook {
 			this->Visible = true;
 			this->Image = this->empty;
 			this->Refresh();
+			this->foodNotInWaterEvent();
 			GetUpEvent();
 		}
 
@@ -67,6 +73,7 @@ namespace Hook {
 				this->isEmpty = false;
 				this->Visible = true;
 				this->Refresh();
+				this->foodInWaterEvent(this->Location, this->Size);
 			}
 			Point get() {
 				return this->cP;
@@ -80,13 +87,14 @@ namespace Hook {
 		}
 		void Touch(Fish::Fish^ fish) {
 			if (isEmpty) return;
-			if (rnd->Next(1, 6) == 5) {
+			if (rnd->Next(1, 10) == 5) {
 				this->Eat();
 				return;
 			}
-			if (rnd->Next(1, 3) == 5) {
-				
-				this->CatchEvent();
+			if (rnd->Next(1, 3) == 2) {
+				fish->Catch();
+				this->Catch();
+				this->GetUpEvent += gcnew HookEventHandler(fish, &Fish::Fish::Pick);
 				return;
 			}
 			TouchEvent();

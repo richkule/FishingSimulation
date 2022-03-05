@@ -5,9 +5,6 @@ namespace Fish {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-	const int PICK_STATUS = 1;
-	const int FREE_STATUS = 2;
-	const int CATCH_STATUS = 3;
 	public ref class Fish : public System::Windows::Forms::PictureBox {
 	private: System::Windows::Forms::Timer^  timerEat;
 			 System::Windows::Forms::Timer^  timerMove;
@@ -28,53 +25,53 @@ namespace Fish {
 			 bool foodHere;
 			 Rectangle foodArea;
 			 Random^ rnd = gcnew Random();
-	property int catchStatus {
-		void set(int catchStatus) {
-			switch (catchStatus)
-			{
-			PICK_STATUS:
-				if (!isCatch) return;
-				this->Visible = false;
-				this->timerEat->Enabled = false;
-				this->timerMove->Enabled = false;
-				this->Parent->Controls->Remove(this);
-				return;
-			CATCH_STATUS:
-				this->timerEat->Enabled = false;
-				this->timerMove->Enabled = false;
-				this->isCatch = true;
-				this->Size = System::Drawing::Size(sizeY, sizeX);
-				this->Image = System::Drawing::Image::FromFile("..\\static\\catch_fish.png");
-				this->Image->RotateFlip(RotateFlipType::Rotate90FlipY);
-			}
-			if (catchStatus == PICK_STATUS) {
-				if (!isCatch) return;
-				this->Visible = false;
-				this->timerEat->Enabled = false;
-				this->timerMove->Enabled = false;
-				this->Parent->Controls->Remove(this);
-				return;
-			}
-			
-
-			int hookMiddleX = hook->Location.X + hook->sizeX / 2;
-			int hookMiddleY = hook->Location.Y - hook->sizeY / 2;
-			int newX = hookMiddleX - sizeY / 2;
+			 System::Drawing::Image^ catchImage = System::Drawing::Image::FromFile("..\\static\\catch_fish.png");
+			 System::Drawing::Image^ swimImage = System::Drawing::Image::FromFile("..\\static\\fish.png");
+	public: 
+		void Pick() {
+			if (!isCatch) return;
+			if (!this->Visible) return;
+			this->Visible = false;
+			this->timerEat->Enabled = false;
+			this->timerMove->Enabled = false;
+			this->Parent->Controls->Remove(this);
+			return;
+		}
+		void Catch() {
+			if (isCatch) return;
+			this->timerEat->Enabled = false;
+			this->timerMove->Enabled = false;
+			this->isCatch = true;
+			this->Size = System::Drawing::Size(sizeY, sizeX);
+			this->Image = catchImage;
+			this->Image->RotateFlip(RotateFlipType::Rotate90FlipY);
+			int hookMiddleX = foodArea.Location.X + foodArea.Size.Width / 2;
+			int hookMiddleY = foodArea.Location.Y - foodArea.Size.Height / 2;
+			int newX = hookMiddleX - sizeY / 3.75;
 			this->Location = System::Drawing::Point(newX, hookMiddleY);
-			this->hook->Visible = false;
 			this->Refresh();
+			return;
 		}
-		int get() {
-			return this->isCatch;
+		void Free() {
+			if (!isCatch) return;
+			if (!this->Visible) return;
+			this->timerEat->Enabled = true;
+			this->timerMove->Enabled = true;
+			this->Image->RotateFlip(RotateFlipType::Rotate270FlipY);
+			return;
 		}
-	}
+		
 	public:
 		delegate void EatEventHandler(Fish^);
-		static event EatEventHandler^ EatEvent;
+		delegate void FoodInWaterHandler(Point, System::Drawing::Size);
+		FoodInWaterHandler^ foodInWaterHandler;
+		delegate void FoodNotInWaterHandler();
+		FoodNotInWaterHandler^ foodNotInWaterHandler;
+		static event EatEventHandler^ eatEvent;
 
 		Fish()
 		{
-			this->Image = System::Drawing::Image::FromFile("..\\static\\fish.png");
+			this->Image = swimImage;
 			this->Spawn();
 			this->Size = System::Drawing::Size(sizeX, sizeY);
 			this->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
@@ -86,16 +83,11 @@ namespace Fish {
 			this->timerEat->Tick += gcnew System::EventHandler(this, &Fish::TryEat);
 			this->timerEat->Interval = 500;
 			this->timerEat->Enabled = true;
+			this->foodNotInWaterHandler = gcnew FoodNotInWaterHandler(this, &Fish::FoodNotInWater);
+			this->foodInWaterHandler = gcnew FoodInWaterHandler(this, &Fish::FoodInWater);
 		}
 
-	public:
-		void Catch() {
-			if (!isCatch) return;
-			this->Visible = false;
-			this->timerEat->Enabled = false;
-			this->timerMove->Enabled = false;
-			this->Parent->Controls->Remove(this);
-		}
+	private:
 		void FoodNotInWater() {
 			foodHere = false;
 		}
@@ -139,7 +131,7 @@ namespace Fish {
 	}
 	private: void TryEat(System::Object^  sender, System::EventArgs^  e) {
 		if (!foodHere) return;
-		if (Rectangle(this->Location, this->Size).IntersectsWith(foodArea)) EatEvent(this);
+		if (Rectangle(this->Location, this->Size).IntersectsWith(foodArea)) eatEvent(this);
 	}
 
 

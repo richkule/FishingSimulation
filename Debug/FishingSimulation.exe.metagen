@@ -14,77 +14,153 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Class Hook: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+Class Fish.Fish: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.PictureBox
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
-    Boolean isEmpty : Public
-    Int32 sizeX : Public
-    Int32 sizeY : Public
-    System.Drawing.Point couplingPoint : Public
+    FoodInWaterHandler foodInWaterHandler : Public
+    FoodNotInWaterHandler foodNotInWaterHandler : Public
+  Events:
+    EatEventHandler eatEvent: SpecialName
   Methods:
-    Activate(Point): PrivateScope, Public, HideBySig
-    GetUp(Point): PrivateScope, Public, HideBySig
-    SetLocationFromCouplingPoint(Point): PrivateScope, Public, HideBySig
-    AddCatchHandler(EventHandler): PrivateScope, Public, HideBySig
-    AddTouchHandler(EventHandler): PrivateScope, Public, HideBySig
-    AddGetUpHandler(EventHandler): PrivateScope, Public, HideBySig
-    DelGetUpHandler(EventHandler): PrivateScope, Public, HideBySig
+    Pick(): PrivateScope, Public, HideBySig
     Catch(): PrivateScope, Public, HideBySig
-    Touch(): PrivateScope, Public, HideBySig
-    Eat(): PrivateScope, Public, HideBySig
-Class Float: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Free(): PrivateScope, Public, HideBySig
+    add_eatEvent(EatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_eatEvent(EatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+Class Fish.Fish+EatEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Fish): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Fish, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Fish.Fish+FoodInWaterHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Point, Size): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Point, Size, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Fish.Fish+FoodNotInWaterHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Hook.Hook: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.PictureBox
-    Void .ctor(System.EventHandler, System.EventHandler): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    EatEventHandler tryEatHandler : Public
+  Properties:
+    System.Drawing.Point couplingPoint 'get set' : 
+  Events:
+    FoodNotInWaterHandler foodNotInWaterEvent: SpecialName
+    FoodInWaterHandler foodInWaterEvent: SpecialName
+    HookSetUpEventHandler SetUpEvent: SpecialName
+    HookEventHandler GetUpEvent: SpecialName
+    HookEventHandler EatEvent: SpecialName
+    HookEventHandler TouchEvent: SpecialName
+    HookEventHandler CatchEvent: SpecialName
+  Methods:
+    add_CatchEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_CatchEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_TouchEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_TouchEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_EatEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_EatEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_GetUpEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_GetUpEvent(HookEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_SetUpEvent(HookSetUpEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_SetUpEvent(HookSetUpEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_foodInWaterEvent(FoodInWaterHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_foodInWaterEvent(FoodInWaterHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_foodNotInWaterEvent(FoodNotInWaterHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_foodNotInWaterEvent(FoodNotInWaterHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    GetUp(Point): PrivateScope, Public, HideBySig
+    set_couplingPoint(Point): PrivateScope, Public, HideBySig, SpecialName
+    get_couplingPoint(): PrivateScope, Public, HideBySig, SpecialName
+    Catch(): PrivateScope, Public, HideBySig
+    Touch(Fish): PrivateScope, Public, HideBySig
+    Eat(): PrivateScope, Public, HideBySig
+Class Hook.Hook+HookEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Hook.Hook+HookSetUpEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Point, Size): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Point, Size, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Float.Float: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.PictureBox
+    Void .ctor(FloatEventHandler, FloatEventHandler): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.Drawing.Point downCouplingPoint : Public
     System.Drawing.Point upperCouplingPoint : Public
+  Events:
+    FloatEventHandler catchEvent: SpecialName
+    FloatEventHandler changeCouplePointEnd: SpecialName
+    FloatEventHandler changeCouplePointStart: SpecialName
   Methods:
-    Activate(Int32): PrivateScope, Public, HideBySig
+    add_changeCouplePointStart(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_changeCouplePointStart(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_changeCouplePointEnd(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_changeCouplePointEnd(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_catchEvent(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_catchEvent(FloatEventHandler): PrivateScope, Public, Static, HideBySig, SpecialName
+    SetUp(Int32): PrivateScope, Public, HideBySig
     GetUp(Point): PrivateScope, Public, HideBySig
-    AddCatchHandler(EventHandler): PrivateScope, Public, HideBySig
-    Catch(Object, EventArgs): PrivateScope, Public, HideBySig
-    Touch(Object, EventArgs): PrivateScope, Public, HideBySig
-Class Fish: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :System.Windows.Forms.PictureBox
-    Void .ctor(Hook): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Hook hook : Public
+    Catch(): PrivateScope, Public, HideBySig
+    Touch(): PrivateScope, Public, HideBySig
+Class Float.Float+FloatEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
   Methods:
-    PickFish(Object, EventArgs): PrivateScope, Public, HideBySig
-Class Tackle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Tackle.Tackle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.ComponentModel.Component
     Void .ctor(System.Windows.Forms.Control, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Hook hook : Public
   Methods:
     SetTackle(Int32, Int32): PrivateScope, Public, HideBySig
     GetTackle(Point): PrivateScope, Public, HideBySig
-    AddCatchHandler(EventHandler): PrivateScope, Public, HideBySig
-    GetHook(): PrivateScope, Public, HideBySig
     SetFsp(Point): PrivateScope, Public, HideBySig
-    ChangeCouplePointStart(Object, EventArgs): PrivateScope, Public, HideBySig
-    ChangeCouplePointEnd(Object, EventArgs): PrivateScope, Public, HideBySig
-Class Fisher: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    ChangeCouplePointStart(): PrivateScope, Public, HideBySig
+    ChangeCouplePointEnd(): PrivateScope, Public, HideBySig
+    AddCatchHandler(HookEventHandler): PrivateScope, Public, HideBySig
+    GetHook(): PrivateScope, Public, HideBySig
+Class Fisher.Fisher: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.PictureBox
-    Void .ctor(System.Windows.Forms.Control, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.Windows.Forms.Control, System.Drawing.Color, Tackle.Tackle): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.Drawing.Point couplingPoint : Public
     System.Windows.Forms.Timer waitTaimer : Public
   Methods:
-    AutoCatch(Object, EventArgs): PrivateScope, Public, HideBySig
+    AutoCatch(): PrivateScope, Public, HideBySig
+    Disable(): PrivateScope, Public, HideBySig
+    Enable(): PrivateScope, Public, HideBySig
     Action(Object, EventArgs): PrivateScope, Public, HideBySig
-    GetHook(): PrivateScope, Public, HideBySig
-Class WorldGenerator: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+Class WorldGenerator.WorldGenerator: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     ReturnWhetherImage(): PrivateScope, Public, HideBySig
     ReturnColor(): PrivateScope, Public, HideBySig
     SpawnFish(Form, Hook): PrivateScope, Public, HideBySig
-Class FisherWithBoat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :Fisher
-    Void .ctor(System.Windows.Forms.Control, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class FisherWithBoat.FisherWithBoat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Fisher.Fisher
+    Void .ctor(System.Windows.Forms.Control, System.Drawing.Color, Tackle.Tackle): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
+    Disable(): PrivateScope, Public, HideBySig
+    Enable(): PrivateScope, Public, HideBySig
     Move(Object, EventArgs): PrivateScope, Public, HideBySig
     Left(Object, EventArgs): PrivateScope, Public, HideBySig
     Right(Object, EventArgs): PrivateScope, Public, HideBySig
@@ -92,3 +168,5 @@ Class FisherWithBoat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
 Class FishingSimulation.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Boolean isFisher : Public

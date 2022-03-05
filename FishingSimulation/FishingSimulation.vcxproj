@@ -136,12 +136,17 @@
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes.h" />
-    <ClInclude Include="Fish.h" />
-    <ClInclude Include="Hook.h" />
+    <ClInclude Include="Classes.cpp" />
+    <ClInclude Include="Fish.cpp" />
+    <ClInclude Include="Fisher.cpp" />
+    <ClInclude Include="FisherWithBoat.cpp" />
+    <ClInclude Include="Float.cpp" />
+    <ClInclude Include="Hook.cpp" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Tackle.cpp" />
+    <ClInclude Include="WorldGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

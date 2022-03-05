@@ -1,5 +1,7 @@
 #pragma once
-#include "Classes.h"
+#include "WorldGenerator.cpp"
+#include "FisherWithBoat.cpp"
+#include "Fisher.cpp"
 namespace FishingSimulation {
 
 	using namespace System;
@@ -15,6 +17,7 @@ namespace FishingSimulation {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
+		
 		MyForm(void)
 		{
 
@@ -22,13 +25,18 @@ namespace FishingSimulation {
 
 			
 			this->platrorm->Image = System::Drawing::Image::FromFile("..\\static\\berth.png");
-			WorldGenerator^ wg = gcnew WorldGenerator();
-			this->platrorm->Visible = false;
+			WorldGenerator::WorldGenerator^ wg = gcnew WorldGenerator::WorldGenerator();
+			this->platrorm->Visible = true;
 			this->whether->Image = wg->ReturnWhetherImage();
 			this->BackColor = wg->ReturnColor();
-			this->fisherBoat = gcnew FisherWithBoat(this, this->BackColor);
+			Tackle::Tackle^ tackle = gcnew Tackle::Tackle(this,this->BackColor);
+			this->fisherBoat = gcnew FisherWithBoat::FisherWithBoat(this, this->BackColor,tackle);
 			this->Controls->Add(this->fisherBoat);
-			Hook^ hook = this->fisherBoat->GetHook();
+			this->fisher = gcnew Fisher::Fisher(this, this->BackColor, tackle);
+			this->Controls->Add(this->fisher);
+			this->fisherBoat->Disable();
+			isFisher = true;
+			Hook::Hook^ hook = tackle->GetHook();
 			wg->SpawnFish(this, hook);			
 		
 			//
@@ -36,6 +44,8 @@ namespace FishingSimulation {
 			//
 		}
 
+	public:
+		bool isFisher;
 	protected:
 		/// <summary>
 		/// Освободить все используемые ресурсы.
@@ -67,11 +77,12 @@ namespace FishingSimulation {
 
 
 
-			 FisherWithBoat^ fisherBoat;
-			 Fisher^ fisher;
+			 FisherWithBoat::FisherWithBoat^ fisherBoat;
+			 Fisher::Fisher^ fisher;
 	private: System::Windows::Forms::Button^  left;
 	private: System::Windows::Forms::Button^  right;
 	private: System::Windows::Forms::Button^  stop;
+	private: System::Windows::Forms::Button^  change_button;
 
 
 
@@ -113,6 +124,7 @@ namespace FishingSimulation {
 			this->left = (gcnew System::Windows::Forms::Button());
 			this->right = (gcnew System::Windows::Forms::Button());
 			this->stop = (gcnew System::Windows::Forms::Button());
+			this->change_button = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->whether))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->platrorm))->BeginInit();
 			this->SuspendLayout();
@@ -147,7 +159,6 @@ namespace FishingSimulation {
 			this->left->Text = L"left";
 			this->left->UseVisualStyleBackColor = true;
 			this->left->Click += gcnew System::EventHandler(this, &MyForm::left_Click);
-
 			// 
 			// right
 			// 
@@ -158,7 +169,6 @@ namespace FishingSimulation {
 			this->right->Text = L"right";
 			this->right->UseVisualStyleBackColor = true;
 			this->right->Click += gcnew System::EventHandler(this, &MyForm::right_Click);
-
 			// 
 			// stop
 			// 
@@ -170,12 +180,23 @@ namespace FishingSimulation {
 			this->stop->UseVisualStyleBackColor = true;
 			this->stop->Click += gcnew System::EventHandler(this, &MyForm::stop_Click);
 			// 
+			// change_button
+			// 
+			this->change_button->Location = System::Drawing::Point(244, 21);
+			this->change_button->Name = L"change_button";
+			this->change_button->Size = System::Drawing::Size(66, 27);
+			this->change_button->TabIndex = 7;
+			this->change_button->Text = L"change";
+			this->change_button->UseVisualStyleBackColor = true;
+			this->change_button->Click += gcnew System::EventHandler(this, &MyForm::change_button_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::DeepSkyBlue;
 			this->ClientSize = System::Drawing::Size(1450, 901);
+			this->Controls->Add(this->change_button);
 			this->Controls->Add(this->stop);
 			this->Controls->Add(this->right);
 			this->Controls->Add(this->left);
@@ -195,12 +216,8 @@ private: System::Void PaintWater(System::Object^  sender, System::Windows::Forms
 	e->Graphics->FillRectangle(Brushes::RoyalBlue, 0, 466, 1500, 600);
 }
 private: System::Void MyForm_Click(System::Object^  sender, System::EventArgs^  e) {
-	if (fisherBoat != nullptr) {
 		fisherBoat->Action(sender, e);
-	}
-	else {
-		this->fisher->Action(this, gcnew EventArgs());
-	}
+		this->fisher->Action(sender, e);
 	
 }
 	private: System::Void left_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -216,6 +233,20 @@ private: System::Void right_Click(System::Object^  sender, System::EventArgs^  e
 private: System::Void stop_Click(System::Object^  sender, System::EventArgs^  e) {
 	if (fisherBoat != nullptr) {
 		fisherBoat->KeyUp(sender, e);
+	}
+}
+private: System::Void change_button_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (this->isFisher) {
+		this->platrorm->Visible = false;
+		this->fisherBoat->Enable();
+		this->isFisher = false;
+		this->fisher->Disable();
+	}
+	else {
+		this->platrorm->Visible = true;
+		this->fisherBoat->Disable();
+		this->isFisher = true;
+		this->fisher->Enable();
 	}
 }
 };
